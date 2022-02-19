@@ -34,7 +34,7 @@ private[ff4s] object VNode {
       )
   }
 
-  implicit def fromString[F[_]](text: String) = new VNode[F] {
+  implicit def fromString[F[_]](text: String): VNode[F] = new VNode[F] {
     override def toSnabbdom(dispatcher: Dispatcher[F]): VNodeProxy =
       VNodeProxy.fromString(text)
   }

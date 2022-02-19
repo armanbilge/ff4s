@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.13.8"
+ThisBuild / scalaVersion := "3.1.1" //"2.13.8"
 
 ThisBuild / organization := "com.github.buntec"
 ThisBuild / organizationName := "buntec"
@@ -22,7 +22,7 @@ lazy val ff4s = (project in file("ff4s"))
   .settings(
     name := "ff4s",
     git.useGitDescribe := true,
-    crossScalaVersions := Seq("2.12.15", "2.13.8"),
+    crossScalaVersions := Seq("2.12.15", "2.13.8", "3.1.1"),
     scalacOptions -= "-Xfatal-warnings",
     Compile / npmDependencies ++= Seq(
       "snabbdom" -> "3.2.0",
@@ -39,11 +39,9 @@ lazy val ff4s = (project in file("ff4s"))
       "co.fs2" %%% "fs2-core" % fs2Version,
       "com.softwaremill.sttp.client3" %%% "core" % sttpVersion,
       "com.softwaremill.sttp.client3" %%% "cats" % sttpVersion,
-      "com.softwaremill.sttp.client3" %%% "circe" % sttpVersion,
-      compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-      compilerPlugin(
-        "org.typelevel" % "kind-projector" % kindProjectorVersion cross CrossVersion.full
-      )
+      "com.softwaremill.sttp.client3" %%% "circe" % sttpVersion
+      // compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
+      // compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorVersion cross CrossVersion.full)
     )
   )
 

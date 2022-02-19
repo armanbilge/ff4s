@@ -43,7 +43,8 @@ object DataObject {
   type AttrValue = String | Boolean | Double | Int
   type StyleValue = String | js.Dictionary[String]
   type KeyValue =
-    String | Double | Int // https://github.com/snabbdom/snabbdom#key--string--number
+    String | Double |
+      Int // https://github.com/snabbdom/snabbdom#key--string--number
 
   def empty: DataObject = new DataObject {}
 }
@@ -137,12 +138,12 @@ object thunk {
     val proxy = new VNodeProxy {
       sel = selector
       data = new DataObject {
-        hook = new Hooks {
+        hook = new Hooks { self =>
           init = initHook
           insert = { (p: VNodeProxy) =>
             p.data.foreach(_.hook.foreach(_.insert.foreach(_(p))))
           }: Hooks.HookSingleFn
-          prepatch = prepatchHook
+          self.prepatch = prepatchHook
           update = { (o: VNodeProxy, p: VNodeProxy) =>
             p.data.foreach(_.hook.foreach(_.update.foreach(_(o, p))))
           }: Hooks.HookPairFn
@@ -177,8 +178,8 @@ object thunk {
       selector,
       keyValue,
       renderArgs,
-      initThunk(renderFn),
-      prepatchArray(renderFn)
+      thunk => initThunk(renderFn)(thunk),
+      (oldProxy, thunk) => prepatchArray(renderFn)(oldProxy, thunk)
     )
 
   @inline def conditional(
@@ -193,8 +194,8 @@ object thunk {
       selector,
       keyValue,
       shouldRender,
-      initThunk(renderFn),
-      prepatchBoolean(renderFn)
+      thunk => initThunk(renderFn)(thunk),
+      (oldProxy, thunk) => prepatchBoolean(renderFn)(oldProxy, thunk)
     )
 }
 
